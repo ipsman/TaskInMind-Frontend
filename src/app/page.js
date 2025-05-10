@@ -45,8 +45,6 @@ const Home = () => {
 
   const backgroundImageUrl = `url('https://picsum.photos/${screenWidth}/${screenHeight}')`;
 
-
-
   return (
     <div className="w-full h-full flex-col" style={{ backgroundImage: backgroundImageUrl }}>
       <div className="dark:bg-[#000000b9] bg-[#ffffffb9] px-[10px] h-[55px] flex gap-28">
@@ -54,7 +52,7 @@ const Home = () => {
         <p className="text-xl content-center">{currentYear}. {months[currentMonth]}</p>
       </div>
       <div className="flex h-[calc(100%-55px)]">
-        <div className="dark:bg-[#000000b9] bg-[#ffffffb9] px-[10px] h-full"> <Sidenav></Sidenav></div>
+        <Sidenav></Sidenav>
         <div className="h-full w-full"><Calendar></Calendar></div>
         <div className="dark:bg-[#000000b9] bg-[#ffffffb9] px-[10px] h-full w-[80px]">oldalsav</div>
       </div>
