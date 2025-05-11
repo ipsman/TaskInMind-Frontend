@@ -4,6 +4,7 @@ export const metadata = {
   title: "TaskInMind",
 };
 
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="w-full h-full overflow-hidden">
@@ -13,3 +14,5 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+
+
