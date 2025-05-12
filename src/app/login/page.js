@@ -16,11 +16,26 @@ const LoginPage = ({ onSignUp, onLoginSuccess }) => {
   };
 
   const handleSignIn = () => {
-    if (email === 'asd@gmail.com' && password === 'asd') {
+    const storedUsers = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('userData_')) {
+        try {
+          const userString = localStorage.getItem(key);
+          if (userString) {
+            const user = JSON.parse(userString);
+            storedUsers[user.email] = user;
+          }
+        } catch (error) {
+          console.error('Hiba a felhasználói adatok olvasása közben:', error);
+        }
+      }
+    }
 
-        localStorage.setItem('authToken', 'valami_token');
-        onLoginSuccess();
-
+    if (storedUsers[email] && storedUsers[email].password === password) {
+      localStorage.setItem('authToken', 'valami_token');
+      localStorage.setItem('loggedInUsername', storedUsers[email].name);
+      onLoginSuccess();
     } else {
       setLoginError('Hibás e-mail cím vagy jelszó.');
     }

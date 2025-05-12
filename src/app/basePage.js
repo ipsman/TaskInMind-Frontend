@@ -3,7 +3,7 @@
 import Calendar from "./Center/calendar";
 import Sidenav from "./SideNav/Sidenav";
 
-const BasePage = () => {
+const BasePage = ({ onLogout }) => {
   const currentYear = new Date().getFullYear()
   const currentMonth = new Date().getMonth()
   const months = [
@@ -28,7 +28,7 @@ const BasePage = () => {
         <p className="text-xl content-center">{currentYear}. {months[currentMonth]}</p>
       </div>
       <div className="flex h-[calc(100%-55px)]">
-        <Sidenav></Sidenav>
+        <Sidenav onLogout={onLogout}></Sidenav>
         <div className="h-full w-full"><Calendar></Calendar></div>
         <div className="dark:bg-[#000000b9] bg-[#ffffffb9] px-[10px] h-full w-[80px]">oldalsav</div>
       </div>

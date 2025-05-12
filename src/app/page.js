@@ -47,9 +47,10 @@ const Home = () => {
     setIsLoggedIn(true);
   };
 
-  const handleLogout = () => {
-      localStorage.removeItem('authToken');
-      setIsLoggedIn(false);
+ const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('loggedInUsername');
+    setIsLoggedIn(false);
   };
 
   return (
