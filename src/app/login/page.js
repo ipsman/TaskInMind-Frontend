@@ -80,10 +80,10 @@ const LoginPage = ({ onSignUp, onLoginSuccess }) => {
             {loginError && <p className="text-red-500 text-sm">{loginError}</p>}
           </div>
           <div className="space-y-2 flex flex-col justify-center">
-            <div>
+            <div className='w-full flex justify-center'>
               <button
                 type="button"
-                className="w-full px-8 py-3 font-semibold rounded-md dark:bg-default-600 dark:text-gray-50 transition-all duration-300 active:scale-75"
+                className="px-8 py-3 font-semibold rounded-md dark:bg-gray-50 dark:text-[#000000b9] transition-all duration-300 active:scale-75"
                 onClick={handleSignIn}
               >
                 Sign in

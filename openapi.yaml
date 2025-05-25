@@ -1,0 +1,242 @@
+openapi: 3.0.1
+
+servers:
+  - url: 'http://localhost:8080/'
+    description: for local development
+  - url: 'http://192.168.132.35:8081/'
+    description: for mindspire VPS
+
+info:
+  title: MBH Bank Corporate API
+  version: 0.1.0
+  description: >
+    # Summary
+    
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+    non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    
+    
+    ## Some General Remarks Related to this version of the API Specification:
+    
+    * Lorem ipsum dolor sit amet consectetur adipiscing elit. Sit amet
+    consectetur adipiscing elit quisque faucibus ex. Adipiscing elit quisque
+    faucibus ex sapien vitae pellentesque.
+    
+    * Lorem ipsum dolor sit amet consectetur adipiscing elit. Sit amet
+    consectetur adipiscing elit quisque faucibus ex. Adipiscing elit quisque
+    faucibus ex sapien vitae pellentesque.
+
+tags:
+  - name: Administration Service
+    description: Describes all  administration
+  - name: Authentication Service (v1)
+    description: Describes all authentications
+  - name: Transaction Service (v1)
+    description: Describes all transactions
+  - name: Account Service (v1)
+    description: Describes all accounts
+  - name: Sendbox Management (v1)
+    description: Management all by administration
+
+paths:
+  /v1/authentication/login:
+    post:
+      summary: Login request
+      operationId: login
+      tags:
+        - Authentication Service (v1)
+      requestBody:
+        $ref: '#/components/requestBodies/Placeholder'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessPlaceholderResponse'
+
+  /v1/authentication/registration:
+    post:
+      summary: Registration request
+      operationId: registration
+      tags:
+        - Authentication Service (v1)
+      requestBody:
+        $ref: '#/components/requestBodies/Placeholder'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessPlaceholderResponse'
+
+  /v1/authentication:
+    delete:
+      summary: Remove user
+      operationId: logout
+      tags:
+        - Authentication Service (v1)
+      requestBody:
+        $ref: '#/components/requestBodies/Placeholder'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessPlaceholderResponse'
+    put:
+      summary: Update user
+      operationId: update
+      tags:
+        - Authentication Service (v1)
+      requestBody:
+        $ref: '#/components/requestBodies/Placeholder'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessPlaceholderResponse'
+
+  /v1/transaction/initiate:
+    post:
+      summary: Transaction initiate
+      operationId: initiate
+      tags:
+        - Transaction Service (v1)
+      requestBody:
+        $ref: '#/components/requestBodies/Placeholder'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessPlaceholderResponse'
+
+  /v1/transaction/status:
+    get:
+      summary: Transaction status
+      operationId: status
+      tags:
+        - Transaction Service (v1)
+      requestBody:
+        $ref: '#/components/requestBodies/Placeholder'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessPlaceholderResponse'
+
+  /v1/transaction/approval:
+    post:
+      summary: Transaction status
+      operationId: approval
+      tags:
+        - Transaction Service (v1)
+      requestBody:
+        $ref: '#/components/requestBodies/Placeholder'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessPlaceholderResponse'
+
+  /v1/transaction/revoke:
+    post:
+      summary: Revoke approval or transaction
+      operationId: revoke
+      tags:
+        - Transaction Service (v1)
+      requestBody:
+        $ref: '#/components/requestBodies/Placeholder'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessPlaceholderResponse'
+
+  /v1/account/history:
+    post:
+      summary: Account history
+      operationId: history
+      tags:
+        - Account Service (v1)
+      requestBody:
+        $ref: '#/components/requestBodies/Placeholder'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessPlaceholderResponse'
+
+  /v1/account/balance:
+    post:
+      summary: Account balance
+      operationId: balance
+      tags:
+        - Account Service (v1)
+      requestBody:
+        $ref: '#/components/requestBodies/Placeholder'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessPlaceholderResponse'
+
+  /v1/sendbox:
+    post:
+      summary: Sendbox setup
+      operationId: setup
+      tags:
+        - Sendbox Management (v1)
+      requestBody:
+        $ref: '#/components/requestBodies/Placeholder'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessPlaceholderResponse'
+    delete:
+      summary: Sendbox remove
+      operationId: remove
+      tags:
+        - Sendbox Management (v1)
+      requestBody:
+        $ref: '#/components/requestBodies/Placeholder'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessPlaceholderResponse'
+    put:
+      summary: Sendbox configuration
+      operationId: configuration
+      tags:
+        - Sendbox Management (v1)
+      requestBody:
+        $ref: '#/components/requestBodies/Placeholder'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessPlaceholderResponse'
+
+components:
+  requestBodies:
+    Placeholder:
+      description: Placeholder request body
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              placeholder:
+                type: string
+  responses:
+    SuccessPlaceholderResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              placeholder:
+                type: string
+    Error400Response:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponseMessage'
+    Error500Response:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponseMessage'
+  schemas:
+    ErrorResponseMessage:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: number
+    MessageResponse:
+      type: object
+      properties:
+        message:
+          type: string

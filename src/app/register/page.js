@@ -81,8 +81,8 @@ const RegisterPage = ({ onSignIn }) => {
             {registrationError && <p className="text-red-500 text-sm">{registrationError}</p>}
           </div>
           <div className="space-y-2">
-            <div>
-              <button type="button" className="w-full px-8 py-3 font-semibold rounded-md dark:bg-default-600 dark:text-gray-50" onClick={handleSignUp}>Sign up</button>
+            <div className='w-full flex justify-center'>
+              <button type="button" className="px-8 py-3 font-semibold rounded-md dark:bg-gray-50 dark:text-[#000000b9] transition-all duration-300 active:scale-75" onClick={handleSignUp}>Sign up</button>
             </div>
             <p className="px-6 text-sm text-center ">
               Already registered?{' '}
