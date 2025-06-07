@@ -44,7 +44,7 @@ function MiniCalendar() {
         {days.map((day) => (
           <div
             key={day}
-            className={`py-2 px-1 text-center border-r border-b border-[#ffffff59] last:border-r-0 ${
+            className={`py-2 px-1 text-center ${
               !daysInMonth.some(d => d.getTime() === day.getTime()) ? 'text-[#ffffff74]' : ''
             }`}
           >
