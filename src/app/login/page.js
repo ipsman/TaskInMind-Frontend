@@ -24,7 +24,8 @@ const LoginPage = ({ onSignUp, onLoginSuccess }) => {
           const userString = localStorage.getItem(key);
           if (userString) {
             const user = JSON.parse(userString);
-            storedUsers[user.email] = user;
+            storedUsers[user.name] = user;
+            console.log(user);
           }
         } catch (error) {
           console.error('Hiba a felhasználói adatok olvasása közben:', error);
@@ -56,7 +57,7 @@ const LoginPage = ({ onSignUp, onLoginSuccess }) => {
                 type="email"
                 name="email"
                 id="email"
-                placeholder="teszt@pelda.hu"
+                placeholder="name@email.com"
                 className="w-full px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 text-black "
                 value={email}
                 onChange={handleEmailChange}

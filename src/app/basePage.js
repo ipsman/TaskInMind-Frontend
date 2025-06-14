@@ -40,7 +40,7 @@ const BasePage = ({ onLogout }) => {
             setCurrentMonth={setCurrentMonth}
           />
         </div>
-        <div className="dark:bg-[#000000b9] bg-[#ffffffb9] px-[10px] h-full w-[80px]">oldalsav</div>
+        <div className="dark:bg-[#000000b9] bg-[#ffffffb9] px-[10px] h-full w-[80px]"></div>
       </div>
     </div>
   );

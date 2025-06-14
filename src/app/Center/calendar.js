@@ -40,10 +40,12 @@ function Calendar({ currentMonth, setCurrentMonth }) {
   }, [currentMonth, setCurrentMonth]);
 
 
-  const openDayPlan = ( dayTitle ) => {
-    document.getElementById("dayPlan").style.transform = "translatey(-0px)";
-    document.getElementById("date1").value = dayTitle;
-    document.getElementById("date2").value = dayTitle;
+  const openDayPlan = ( day ) => {
+
+     const formattedDate = format(day, 'yyyy-MM-dd');
+    document.getElementById("dayPlan").style.transform = "translatey(-1925px)";
+    document.getElementById("date1").value = formattedDate;
+    document.getElementById("date2").value = formattedDate;
     var hours = new Date;
     document.getElementById("hours1").value = hours.getHours().toString().padStart(2, '0') + ":" + hours.getMinutes().toString().padStart(2, '0');
     document.getElementById("hours2").value = (hours.getHours()+1).toString().padStart(2, '0') + ":" + hours.getMinutes().toString().padStart(2, '0');
@@ -59,7 +61,7 @@ function Calendar({ currentMonth, setCurrentMonth }) {
       <div className="h-[calc(100%-40px)] grid grid-cols-7">
         {days.map((day) => (
           <button 
-            key={day.toISOString()} onClick={() => openDayPlan(new Date(day.getFullYear(), day.getMonth(), day.getDate()).toDateString().slice(4))}
+            key={day.toISOString()} onClick={() => openDayPlan(new Date(day.getFullYear(), day.getMonth(), day.getDate()))}
             className={`py-2 px-1 border-r border-b flex justify-center border-[#ffffff59] w-full duration-150 hover:bg-[#ffffff1f] last:border-r-0
              ${!daysInMonth.some(d => isSameDay(d, day)) ? 'text-[#ffffff74]' : ''}`}>
             <div className={`
