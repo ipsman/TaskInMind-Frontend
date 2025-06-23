@@ -25,7 +25,7 @@ const Sidenav = ({ onLogout }) => {
     };
     
     const openSettings = () => {
-        document.getElementById("settings").style.transform = "translatey(0px)";
+        document.getElementById("settings").style.transform = "translatey(-1925px)";
     };
 
     const username = localStorage.getItem('loggedInUsername');
