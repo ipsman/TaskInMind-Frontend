@@ -24,7 +24,7 @@ const LoginPage = ({ onSignUp, onLoginSuccess }) => {
           const userString = localStorage.getItem(key);
           if (userString) {
             const user = JSON.parse(userString);
-            storedUsers[user.name] = user;
+            storedUsers[user.email] = user;
             console.log(user);
           }
         } catch (error) {

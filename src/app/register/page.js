@@ -45,8 +45,29 @@ const RegisterPage = ({ onSignIn }) => {
     const objectString = JSON.stringify(userData);
     localStorage.setItem('userData_' + username, objectString);
     console.log('Felhasználói adatok elmentve a localStorage-ba:', userData);
+    registerUser(username, password, email);
     onSignIn();
   };
+
+  async function registerUser(username, password, email) {
+    const response = await fetch('http://localhost:8080/api/users', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password, email }),
+    });
+
+    if (response.ok) {
+        const user = await response.json();
+        console.log('User registered successfully:', user);
+        return user;
+    } else {
+        const errorData = await response.json();
+        console.error('Failed to register user:', response.status, errorData);
+        throw new Error('Registration failed');
+    }
+}
 
   return (
     <div className="h-full w-full flex items-center justify-center">
