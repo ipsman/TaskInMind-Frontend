@@ -1,242 +1,684 @@
-openapi: 3.0.1
+openapi: 3.0.0
+info:
+  title: TaskInMind API
+  version: 1.0.0
+  description: API for the TaskInMind application, managing tasks, events, and user profiles.
 
 servers:
-  - url: 'http://localhost:8080/'
-    description: for local development
-  - url: 'http://192.168.132.35:8081/'
-    description: for mindspire VPS
-
-info:
-  title: MBH Bank Corporate API
-  version: 0.1.0
-  description: >
-    # Summary
-    
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-    non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    
-    
-    ## Some General Remarks Related to this version of the API Specification:
-    
-    * Lorem ipsum dolor sit amet consectetur adipiscing elit. Sit amet
-    consectetur adipiscing elit quisque faucibus ex. Adipiscing elit quisque
-    faucibus ex sapien vitae pellentesque.
-    
-    * Lorem ipsum dolor sit amet consectetur adipiscing elit. Sit amet
-    consectetur adipiscing elit quisque faucibus ex. Adipiscing elit quisque
-    faucibus ex sapien vitae pellentesque.
+  - url: http://localhost:8080/api # A backend API alap URL-je
+    description: Development server
 
 tags:
-  - name: Administration Service
-    description: Describes all  administration
-  - name: Authentication Service (v1)
-    description: Describes all authentications
-  - name: Transaction Service (v1)
-    description: Describes all transactions
-  - name: Account Service (v1)
-    description: Describes all accounts
-  - name: Sendbox Management (v1)
-    description: Management all by administration
+  - name: Authentication
+    description: User login and registration operations
+  - name: User Profile
+    description: Operations related to the current authenticated user's profile
+  - name: Tasks
+    description: Operations for managing user tasks
+  - name: Events
+    description: Operations for managing user events
 
 paths:
-  /v1/authentication/login:
+  /auth/register:
     post:
-      summary: Login request
-      operationId: login
+      summary: Register a new user
       tags:
-        - Authentication Service (v1)
+        - Authentication
       requestBody:
-        $ref: '#/components/requestBodies/Placeholder'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
       responses:
-        '200':
-          $ref: '#/components/responses/SuccessPlaceholderResponse'
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Invalid input / User already exists
 
-  /v1/authentication/registration:
+  /auth/login:
     post:
-      summary: Registration request
-      operationId: registration
+      summary: Authenticate user and get JWT token
       tags:
-        - Authentication Service (v1)
+        - Authentication
       requestBody:
-        $ref: '#/components/requestBodies/Placeholder'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
       responses:
         '200':
-          $ref: '#/components/responses/SuccessPlaceholderResponse'
+          description: User logged in successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid credentials
 
-  /v1/authentication:
-    delete:
-      summary: Remove user
-      operationId: logout
-      tags:
-        - Authentication Service (v1)
-      requestBody:
-        $ref: '#/components/requestBodies/Placeholder'
-      responses:
-        '200':
-          $ref: '#/components/responses/SuccessPlaceholderResponse'
-    put:
-      summary: Update user
-      operationId: update
-      tags:
-        - Authentication Service (v1)
-      requestBody:
-        $ref: '#/components/requestBodies/Placeholder'
-      responses:
-        '200':
-          $ref: '#/components/responses/SuccessPlaceholderResponse'
-
-  /v1/transaction/initiate:
-    post:
-      summary: Transaction initiate
-      operationId: initiate
-      tags:
-        - Transaction Service (v1)
-      requestBody:
-        $ref: '#/components/requestBodies/Placeholder'
-      responses:
-        '200':
-          $ref: '#/components/responses/SuccessPlaceholderResponse'
-
-  /v1/transaction/status:
+  /user/profile:
     get:
-      summary: Transaction status
-      operationId: status
+      summary: Get authenticated user's profile
       tags:
-        - Transaction Service (v1)
-      requestBody:
-        $ref: '#/components/requestBodies/Placeholder'
+        - User Profile
+      security:
+        - bearerAuth: [] # Jelzi, hogy hitelesítés szükséges (JWT token)
       responses:
         '200':
-          $ref: '#/components/responses/SuccessPlaceholderResponse'
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '401':
+          description: Unauthorized
+        '404':
+          description: User not found
 
-  /v1/transaction/approval:
-    post:
-      summary: Transaction status
-      operationId: approval
-      tags:
-        - Transaction Service (v1)
-      requestBody:
-        $ref: '#/components/requestBodies/Placeholder'
-      responses:
-        '200':
-          $ref: '#/components/responses/SuccessPlaceholderResponse'
-
-  /v1/transaction/revoke:
-    post:
-      summary: Revoke approval or transaction
-      operationId: revoke
-      tags:
-        - Transaction Service (v1)
-      requestBody:
-        $ref: '#/components/requestBodies/Placeholder'
-      responses:
-        '200':
-          $ref: '#/components/responses/SuccessPlaceholderResponse'
-
-  /v1/account/history:
-    post:
-      summary: Account history
-      operationId: history
-      tags:
-        - Account Service (v1)
-      requestBody:
-        $ref: '#/components/requestBodies/Placeholder'
-      responses:
-        '200':
-          $ref: '#/components/responses/SuccessPlaceholderResponse'
-
-  /v1/account/balance:
-    post:
-      summary: Account balance
-      operationId: balance
-      tags:
-        - Account Service (v1)
-      requestBody:
-        $ref: '#/components/requestBodies/Placeholder'
-      responses:
-        '200':
-          $ref: '#/components/responses/SuccessPlaceholderResponse'
-
-  /v1/sendbox:
-    post:
-      summary: Sendbox setup
-      operationId: setup
-      tags:
-        - Sendbox Management (v1)
-      requestBody:
-        $ref: '#/components/requestBodies/Placeholder'
-      responses:
-        '200':
-          $ref: '#/components/responses/SuccessPlaceholderResponse'
-    delete:
-      summary: Sendbox remove
-      operationId: remove
-      tags:
-        - Sendbox Management (v1)
-      requestBody:
-        $ref: '#/components/requestBodies/Placeholder'
-      responses:
-        '200':
-          $ref: '#/components/responses/SuccessPlaceholderResponse'
     put:
-      summary: Sendbox configuration
-      operationId: configuration
+      summary: Update authenticated user's profile
       tags:
-        - Sendbox Management (v1)
+        - User Profile
+      security:
+        - bearerAuth: []
       requestBody:
-        $ref: '#/components/requestBodies/Placeholder'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfileUpdate'
       responses:
         '200':
-          $ref: '#/components/responses/SuccessPlaceholderResponse'
+          description: User profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '400':
+          description: Invalid input
+        '401':
+          description: Unauthorized
+
+  /tasks:
+    get:
+      summary: Get all tasks for the authenticated user
+      tags:
+        - Tasks
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: startDate
+          schema:
+            type: string
+            format: date
+          description: Optional start date to filter tasks (YYYY-MM-DD)
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date
+          description: Optional end date to filter tasks (YYYY-MM-DD)
+      responses:
+        '200':
+          description: A list of tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+        '401':
+          description: Unauthorized
+    post:
+      summary: Create a new task
+      tags:
+        - Tasks
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaskRequest'
+      responses:
+        '201':
+          description: Task created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Invalid input
+        '401':
+          description: Unauthorized
+
+  /tasks/{taskId}:
+    get:
+      summary: Get a task by ID
+      tags:
+        - Tasks
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: taskId
+          required: true
+          schema:
+            type: string
+            format: uuid # Vagy integer, ha ID szám
+          description: ID of the task to retrieve
+      responses:
+        '200':
+          description: Task details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Task not found
+    put:
+      summary: Update a task by ID
+      tags:
+        - Tasks
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: taskId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the task to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTaskRequest'
+      responses:
+        '200':
+          description: Task updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Invalid input
+        '401':
+          description: Unauthorized
+        '404':
+          description: Task not found
+    delete:
+      summary: Delete a task by ID
+      tags:
+        - Tasks
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: taskId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the task to delete
+      responses:
+        '204':
+          description: Task deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Task not found
+
+  /events:
+    get:
+      summary: Get all events for the authenticated user
+      tags:
+        - Events
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: startDate
+          schema:
+            type: string
+            format: date
+          description: Optional start date to filter events (YYYY-MM-DD)
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date
+          description: Optional end date to filter events (YYYY-MM-DD)
+      responses:
+        '200':
+          description: A list of events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        '401':
+          description: Unauthorized
+    post:
+      summary: Create a new event
+      tags:
+        - Events
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEventRequest'
+      responses:
+        '201':
+          description: Event created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          description: Invalid input
+        '401':
+          description: Unauthorized
+
+  /events/{eventId}:
+    get:
+      summary: Get an event by ID
+      tags:
+        - Events
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: eventId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the event to retrieve
+      responses:
+        '200':
+          description: Event details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Event not found
+    put:
+      summary: Update an event by ID
+      tags:
+        - Events
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: eventId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the event to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEventRequest'
+      responses:
+        '200':
+          description: Event updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          description: Invalid input
+        '401':
+          description: Unauthorized
+        '404':
+          description: Event not found
+    delete:
+      summary: Delete an event by ID
+      tags:
+        - Events
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: eventId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the event to delete
+      responses:
+        '204':
+          description: Event deleted successfully
+        '401':
+          description: Unauthorized
+        '404':
+          description: Event not found
 
 components:
-  requestBodies:
-    Placeholder:
-      description: Placeholder request body
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              placeholder:
-                type: string
-  responses:
-    SuccessPlaceholderResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              placeholder:
-                type: string
-    Error400Response:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponseMessage'
-    Error500Response:
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponseMessage'
+  securitySchemes:
+    bearerAuth: # JWT token alapú hitelesítés
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
   schemas:
-    ErrorResponseMessage:
+    # --- Authentication & User Schemas ---
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          example: user123
+        password:
+          type: string
+          format: password
+          example: MyStrongPassword123
+
+    RegisterRequest:
+      type: object
+      required:
+        - username
+        - password
+        - email
+      properties:
+        username:
+          type: string
+          example: newUser
+        password:
+          type: string
+          format: password
+          example: NewSecurePass!
+        email:
+          type: string
+          format: email
+          example: newuser@example.com
+
+    AuthResponse:
       type: object
       properties:
-        message:
+        token:
           type: string
-        status:
-          type: number
-    MessageResponse:
+          description: JWT authentication token
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        userId:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+        username:
+          type: string
+          example: user123
+
+    UserProfile:
       type: object
       properties:
-        message:
+        id:
           type: string
+          format: uuid
+          readOnly: true
+          example: 123e4567-e89b-12d3-a456-426614174000
+        username:
+          type: string
+          example: mate.dev
+        email:
+          type: string
+          format: email
+          example: mate.dev@example.com
+        firstName:
+          type: string
+          nullable: true
+          example: Máté
+        lastName:
+          type: string
+          nullable: true
+          example: Developer
+
+    UserProfileUpdate: # Módosítható mezők a profilban
+      type: object
+      properties:
+        firstName:
+          type: string
+          nullable: true
+          example: Máté
+        lastName:
+          type: string
+          nullable: true
+          example: Developer
+        email:
+          type: string
+          format: email
+          example: new.email@example.com
+
+    # --- Task Schemas ---
+    Task:
+      type: object
+      required:
+        - id
+        - userId
+        - title
+        - completed
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true # Az ID-t a szerver generálja
+          example: a1b2c3d4-e5f6-7890-1234-567890abcdef
+        userId:
+          type: string
+          format: uuid
+          readOnly: true # Ezt a szerver rendeli a bejelentkezett felhasználóhoz
+          example: 123e4567-e89b-12d3-a456-426614174000
+        title:
+          type: string
+          description: Short description of the task
+          example: Buy groceries
+        description:
+          type: string
+          nullable: true
+          description: Detailed description of the task
+          example: Milk, eggs, bread, cheese
+        dueDate:
+          type: string
+          format: date-time # ISO 8601 dátum és idő (pl. 2025-07-01T10:00:00Z)
+          nullable: true
+          description: The deadline for the task
+          example: 2025-07-01T18:00:00Z
+        completed:
+          type: boolean
+          description: Whether the task is completed or not
+          example: false
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+          example: 2025-06-28T10:30:00Z
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+          example: 2025-06-28T10:30:00Z
+
+    CreateTaskRequest: # A kérés test, amikor új feladatot hozunk létre (id nélkül)
+      type: object
+      required:
+        - title
+        - completed
+      properties:
+        title:
+          type: string
+          description: Short description of the task
+          example: Plan vacation
+        description:
+          type: string
+          nullable: true
+          description: Detailed description of the task
+          example: Research destinations and book flights
+        dueDate:
+          type: string
+          format: date-time
+          nullable: true
+          description: The deadline for the task
+          example: 2025-08-15T23:59:59Z
+        completed:
+          type: boolean
+          description: Whether the task is completed or not
+          example: false
+
+    UpdateTaskRequest: # A kérés test, amikor egy létező feladatot frissítünk
+      type: object
+      properties: # Minden opcionális, csak a módosítandó mezőket küldjük
+        title:
+          type: string
+          description: Short description of the task
+          example: Buy groceries (updated)
+        description:
+          type: string
+          nullable: true
+          example: Milk, eggs, bread, cheese, butter
+        dueDate:
+          type: string
+          format: date-time
+          nullable: true
+          example: 2025-07-02T10:00:00Z
+        completed:
+          type: boolean
+          example: true
+
+    # --- Event Schemas ---
+    Event:
+      type: object
+      required:
+        - id
+        - userId
+        - title
+        - startTime
+        - endTime
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: f1e2d3c4-b5a6-9876-5432-10fedcba9876
+        userId:
+          type: string
+          format: uuid
+          readOnly: true
+          example: 123e4567-e89b-12d3-a456-426614174000
+        title:
+          type: string
+          description: Title of the event
+          example: Team Meeting
+        description:
+          type: string
+          nullable: true
+          description: Detailed description of the event
+          example: Discussion about Q3 roadmap
+        location:
+          type: string
+          nullable: true
+          description: Physical or virtual location of the event
+          example: Zoom Call / Office room 301
+        startTime:
+          type: string
+          format: date-time
+          description: The start date and time of the event
+          example: 2025-07-05T09:00:00Z
+        endTime:
+          type: string
+          format: date-time
+          description: The end date and time of the event
+          example: 2025-07-05T10:00:00Z
+        allDay:
+          type: boolean
+          description: Whether the event is an all-day event
+          example: false
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+          example: 2025-06-28T10:30:00Z
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+          example: 2025-06-28T10:30:00Z
+
+    CreateEventRequest:
+      type: object
+      required:
+        - title
+        - startTime
+        - endTime
+      properties:
+        title:
+          type: string
+          example: Project Kick-off
+        description:
+          type: string
+          nullable: true
+          example: Initial meeting for the new project
+        location:
+          type: string
+          nullable: true
+          example: Conference Room 1
+        startTime:
+          type: string
+          format: date-time
+          example: 2025-07-10T14:00:00Z
+        endTime:
+          type: string
+          format: date-time
+          example: 2025-07-10T15:00:00Z
+        allDay:
+          type: boolean
+          example: false
+
+    UpdateEventRequest:
+      type: object
+      properties: # Minden opcionális
+        title:
+          type: string
+          example: Project Kick-off (rescheduled)
+        description:
+          type: string
+          nullable: true
+          example: Initial meeting for the new project, now with revised agenda
+        location:
+          type: string
+          nullable: true
+          example: Online - Google Meet
+        startTime:
+          type: string
+          format: date-time
+          example: 2025-07-11T09:30:00Z
+        endTime:
+          type: string
+          format: date-time
+          example: 2025-07-11T10:30:00Z
+        allDay:
+          type: boolean
+          example: false

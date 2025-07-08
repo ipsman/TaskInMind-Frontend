@@ -41,7 +41,7 @@ A projekt telepítéséhez és futtatásához kövesd az alábbi lépéseket:
 
 1.  **Klónozd a repository-t:**
     ```bash
-    git clone [https://github.com/YourUsername/taskinmind-frontend.git](https://github.com/YourUsername/taskinmind-frontend.git)
+    git clone [https://github.com/ipsman/TaskInMind-Frontend](https://github.com/ipsman/TaskInMind-Frontend)
     cd taskinmind-frontend
     ```
 2.  **Telepítsd a függőségeket:**

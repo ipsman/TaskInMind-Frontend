@@ -17,7 +17,6 @@ function Settings() {
                 <button>Customization</button>
                 <button>Notifications</button>
               </div>
-              
           </div>
             <button className="absolute top-2 right-2" onClick={cancelDayPlan}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-7">

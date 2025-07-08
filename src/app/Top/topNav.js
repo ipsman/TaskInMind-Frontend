@@ -42,6 +42,19 @@ const TopNav = ({ currentMonth, goToPreviousMonth, goToNextMonth, goToToday }) =
     }
   };
 
+
+  const openDayPlan = () => {
+
+      var day = new Date;
+      const formattedDate = format(day, 'yyyy-MM-dd');
+      document.getElementById("dayPlan").style.transform = "translatey(-1925px)";
+      document.getElementById("date1").value = formattedDate;
+      document.getElementById("date2").value = formattedDate;
+      
+      document.getElementById("hours1").value = day.getHours().toString().padStart(2, '0') + ":" + day.getMinutes().toString().padStart(2, '0');
+      document.getElementById("hours2").value = (day.getHours()+1).toString().padStart(2, '0') + ":" + day.getMinutes().toString().padStart(2, '0');
+    };
+
   return (
     <div className="dark:bg-[#000000b9] bg-[#ffffffb9] px-[20px] h-[55px] flex justify-between">
         <div className='flex gap-28'>
@@ -75,7 +88,7 @@ const TopNav = ({ currentMonth, goToPreviousMonth, goToNextMonth, goToToday }) =
             </div>
       </div>
       <div className='flex'>
-        <button className='hover:text-gray-400 transition-all duration-300'>
+        <button className='hover:text-gray-400 transition-all duration-300' onClick={openDayPlan}>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-7">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
           </svg>
