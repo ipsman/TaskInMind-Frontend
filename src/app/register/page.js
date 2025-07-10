@@ -50,22 +50,45 @@ const RegisterPage = ({ onSignIn }) => {
   };
 
   async function registerUser(username, password, email) {
-    const response = await fetch('http://localhost:8080/api/users', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password, email }),
-    });
+    try {
+        const response = await fetch('http://localhost:8080/api/auth/register', { // <--- Az ÚJ URL!
+            method: 'POST', // POST metódus
+            headers: {
+                'Content-Type': 'application/json', // Fontos: JSON formátumot küldünk
+            },
+            body: JSON.stringify({ // Az adatokat JSON formátumban küldjük
+                username: username,
+                password: password,
+                email: email
+            }),
+        });
 
-    if (response.ok) {
-        const user = await response.json();
-        console.log('User registered successfully:', user);
-        return user;
-    } else {
-        const errorData = await response.json();
-        console.error('Failed to register user:', response.status, errorData);
-        throw new Error('Registration failed');
+        if (response.ok) { // HTTP státusz 200-299 között van (pl. 201 Created)
+            const newUser = await response.json(); // A backend által visszaadott felhasználói adatok
+            console.log('Sikeres regisztráció:', newUser);
+            alert('Sikeres regisztráció! Most már bejelentkezhetsz.'); // Egyszerű visszajelzés
+            return newUser;
+        } else {
+            // Hiba történt, például ha a felhasználónév már foglalt
+            const errorData = await response.json(); // Feltételezve, hogy a backend hibát is JSON-ban küld
+            let errorMessage = 'Regisztráció sikertelen.';
+            if (errorData && errorData.message) {
+                errorMessage = errorData.message; // Ha a backend küld egy hibaüzenet mezőt
+            } else if (response.status === 400) {
+                errorMessage = 'Hibás adatok a regisztrációhoz (pl. már foglalt felhasználónév).';
+            } else if (response.status === 500) {
+                errorMessage = 'Szerveroldali hiba történt a regisztráció során.';
+            }
+
+            console.error('Regisztráció sikertelen:', response.status, errorData);
+            alert('Hiba a regisztráció során: ' + errorMessage); // Hibaüzenet megjelenítése
+            throw new Error(errorMessage);
+        }
+    } catch (error) {
+        // Hálózati hiba vagy egyéb nem HTTP válasz hiba
+        console.error('Hálózati hiba a regisztráció során:', error);
+        alert('Hálózati hiba: Nem sikerült kommunikálni a szerverrel.');
+        throw error;
     }
 }
 

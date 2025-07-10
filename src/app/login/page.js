@@ -3,12 +3,12 @@
 import React, { useState } from 'react';
 
 const LoginPage = ({ onSignUp, onLoginSuccess }) => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
 
   const handleEmailChange = (event) => {
-    setEmail(event.target.value);
+    setUsername(event.target.value);
   };
 
   const handlePasswordChange = (event) => {
@@ -16,31 +16,62 @@ const LoginPage = ({ onSignUp, onLoginSuccess }) => {
   };
 
   const handleSignIn = () => {
-    const storedUsers = {};
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key && key.startsWith('userData_')) {
-        try {
-          const userString = localStorage.getItem(key);
-          if (userString) {
-            const user = JSON.parse(userString);
-            storedUsers[user.email] = user;
-            console.log(user);
-          }
-        } catch (error) {
-          console.error('Hiba a felhasználói adatok olvasása közben:', error);
-        }
-      }
-    }
+    // const storedUsers = {};
+    // for (let i = 0; i < localStorage.length; i++) {
+    //   const key = localStorage.key(i);
+    //   if (key && key.startsWith('userData_')) {
+    //     try {
+    //       const userString = localStorage.getItem(key);
+    //       if (userString) {
+    //         const user = JSON.parse(userString);
+    //         storedUsers[user.email] = user;
+    //         console.log(user);
+    //       }
+    //     } catch (error) {
+    //       console.error('Hiba a felhasználói adatok olvasása közben:', error);
+    //     }
+    //   }
+    // }
 
-    if (storedUsers[email] && storedUsers[email].password === password) {
-      localStorage.setItem('authToken', 'valami_token');
-      localStorage.setItem('loggedInUsername', storedUsers[email].name);
-      onLoginSuccess();
-    } else {
-      setLoginError('Hibás e-mail cím vagy jelszó.');
-    }
+    // if (storedUsers[email] && storedUsers[email].password === password) {
+    //   localStorage.setItem('authToken', 'valami_token');
+    //   localStorage.setItem('loggedInUsername', storedUsers[email].name);
+    //   onLoginSuccess();
+    // } else {
+    //   setLoginError('Hibás e-mail cím vagy jelszó.');
+    // }
+
+    loginUser(username, password)
   };
+
+  async function loginUser(username, password) {
+    try {
+        const response = await fetch('http://localhost:8080/api/auth/login', {
+            method: 'POST', 
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+        });
+
+        if (response.ok) {
+            const token = await response.text();
+            console.log('Login successful. Token:', token);
+            localStorage.setItem('authToken', token); 
+            localStorage.setItem('loggedInUsername', username);
+            onLoginSuccess(); 
+            return token;
+        } else {
+            const errorText = await response.text();
+            console.error('Login failed:', response.status, errorText);
+
+            throw new Error(errorText || 'Bejelentkezés sikertelen.');
+        }
+    } catch (error) {
+        console.error('Network or other error during login:', error);
+        throw error;
+    }
+}
 
   return (
     <div className="h-full w-full flex items-center justify-center">
@@ -52,14 +83,14 @@ const LoginPage = ({ onSignUp, onLoginSuccess }) => {
         <form noValidate="" action="" className="space-y-12">
           <div className="space-y-4">
             <div>
-              <label htmlFor="email" className="block mb-2 text-sm">Email address</label>
+              <label htmlFor="email" className="block mb-2 text-sm">Username</label>
               <input
-                type="email"
-                name="email"
-                id="email"
-                placeholder="name@email.com"
+                type="text"
+                name="username"
+                id="username"
+                placeholder="Username"
                 className="w-full px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 text-black "
-                value={email}
+                value={username}
                 onChange={handleEmailChange}
               />
             </div>
