@@ -36,15 +36,8 @@ const RegisterPage = ({ onSignIn }) => {
       return;
     }
 
-    const userData = {
-      name: username,
-      email: email,
-      password: password,
-    };
+  
 
-    const objectString = JSON.stringify(userData);
-    localStorage.setItem('userData_' + username, objectString);
-    console.log('Felhasználói adatok elmentve a localStorage-ba:', userData);
     registerUser(username, password, email);
     onSignIn();
   };
@@ -103,11 +96,11 @@ const RegisterPage = ({ onSignIn }) => {
           <div className="space-y-4">
             <div>
               <label htmlFor="email" className="block mb-2 text-sm">Email address</label>
-              <input type="email" name="email" id="email" placeholder="leroy@jenkins.com" className="w-full px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 text-black " value={email} onChange={handleEmailChange} />
+              <input type="email" name="email" id="email" placeholder="your@email.com" className="w-full px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 text-black " value={email} onChange={handleEmailChange} />
             </div>
             <div>
               <label htmlFor="username" className="block mb-2 text-sm">Username</label>
-              <input type="text" name="username" id="username" placeholder="leroyjenkins" className="w-full px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 text-black " value={username} onChange={handleUsernameChange} />
+              <input type="text" name="username" id="username" placeholder="your username" className="w-full px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 text-black " value={username} onChange={handleUsernameChange} />
             </div>
             <div>
               <div className="flex justify-between mb-2">

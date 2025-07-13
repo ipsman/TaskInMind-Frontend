@@ -44,11 +44,11 @@ function Calendar({ currentMonth, setCurrentMonth }) {
 
      const formattedDate = format(day, 'yyyy-MM-dd');
     document.getElementById("dayPlan").style.transform = "translatey(-1925px)";
-    document.getElementById("date1").value = formattedDate;
-    document.getElementById("date2").value = formattedDate;
+    document.getElementById("startDate").value = formattedDate;
+    document.getElementById("endDate").value = formattedDate;
     var hours = new Date;
-    document.getElementById("hours1").value = hours.getHours().toString().padStart(2, '0') + ":" + hours.getMinutes().toString().padStart(2, '0');
-    document.getElementById("hours2").value = (hours.getHours()+1).toString().padStart(2, '0') + ":" + hours.getMinutes().toString().padStart(2, '0');
+    document.getElementById("startHours").value = hours.getHours().toString().padStart(2, '0') + ":" + hours.getMinutes().toString().padStart(2, '0');
+    document.getElementById("endHours").value = (hours.getHours()+1).toString().padStart(2, '0') + ":" + hours.getMinutes().toString().padStart(2, '0');
   };
 
   return (
