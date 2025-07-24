@@ -35,11 +35,12 @@ function DayPlan() {
     cancelDayPlan();
   }
 
-  const token = localStorage.getItem("authToken");
 
   async function addEvent(start, end, eventTitle, eventDesc, eventLoc) {
     try {
       
+      const token = localStorage.getItem("authToken");
+
       const response = await fetch('http://localhost:8080/api/events', {
         method: 'POST',
         headers: {
