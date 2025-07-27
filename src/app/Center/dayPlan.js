@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react';
+import Calendar from './calendar';
 
 function DayPlan() {
   // 1. ÁLLAPOT BŐVÍTÉSE: Külön state az óráknak is
@@ -12,11 +13,11 @@ function DayPlan() {
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
 
-  // Nincs szükség külön handler függvényekre, használhatjuk közvetlenül a settert is
-  // de a konzisztencia kedvéért meghagyhatók. Itt most a rövidebb megoldást mutatom.
+  const [refreshEventsTrigger, setRefreshEventsTrigger] = useState(0);
 
   const cancelDayPlan = () => {
     document.getElementById("dayPlan").style.transform = "translateY(2000px)";
+    setRefreshEventsTrigger(prev => prev + 1);
   };
   
   // 2. MENTÉS LOGIKA JAVÍTÁSA
@@ -93,12 +94,19 @@ function DayPlan() {
                 <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Add a title" className="w-[68.8%] px-3 py-2 border-b-2 duration-100 focus:border-b-4 dark:border-gray-300 dark:bg-[#00000000] focus:outline-0 text-white " />
               </div>
               <div className="flex gap-6 items-center">
-                <input type="date" id='startDate' value={startDate} onChange={(e) => setStartDate(e.target.value)} className="w-[16.5%] px-3 py-2 border-b-2 duration-100 focus:border-b-4 dark:border-gray-300 dark:bg-[#00000000] focus:outline-0 text-white " />
-                {/* 4. INPUT TÍPUS JAVÍTÁSA ÉS BEKÖTÉSE */}
-                <input type="time" id='startHours' value={startHours} onChange={(e) => setStartHours(e.target.value)} className="w-[12%] px-3 py-2 border-b-2 duration-100 focus:border-b-4 dark:border-gray-300 dark:bg-[#00000000] focus:outline-0 text-white " />
+                <div className='w-[16.5%] md:w-[25%] px-3 py-2 border-b-2 duration-100 focus:border-b-4 dark:border-gray-300 dark:bg-[#00000000] focus:outline-0 text-white '>
+                  <input type="date" id='startDate' value={startDate} onChange={(e) => setStartDate(e.target.value)} className="" />
+                </div>
+                <div className='w-[12%] md:w-[25%] px-3 py-2 border-b-2 duration-100 focus:border-b-4 dark:border-gray-300 dark:bg-[#00000000] focus:outline-0 text-white '>
+                  <input type="time" id='startHours' value={startHours} onChange={(e) => setStartHours(e.target.value)} className="" />
+                </div>
                 <p> - </p>
-                <input type="date" id='endDate' value={endDate} onChange={(e) => setEndDate(e.target.value)} className="w-[16.5%] px-3 py-2 border-b-2 duration-100 focus:border-b-4 dark:border-gray-300 dark:bg-[#00000000] focus:outline-0 text-white " />
-                <input type="time" id='endHours' value={endHours} onChange={(e) => setEndHours(e.target.value)} className="w-[12%]  px-3 py-2 border-b-2 duration-100 focus:border-b-4 dark:border-gray-300 dark:bg-[#00000000] focus:outline-0 text-white " />
+                <div className='w-[16.5%] md:w-[25%] px-3 py-2 border-b-2 duration-100 focus:border-b-4 dark:border-gray-300 dark:bg-[#00000000] focus:outline-0 text-white '>
+                  <input type="date" id='endDate' value={endDate} onChange={(e) => setEndDate(e.target.value)} className="" />
+                </div>
+                <div className='w-[12%] md:w-[15%] text-center py-2 border-b-2 duration-100 focus:border-b-4 dark:border-gray-300 dark:bg-[#00000000] focus:outline-0 text-white '>
+                  <input type="time" id='endHours' value={endHours} onChange={(e) => setEndHours(e.target.value)} className="" />
+                </div>
               </div>
               <div>
                 <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Description" className="w-[68.8%] px-3 py-2 border-b-2 duration-100 focus:border-b-4 dark:border-gray-300 dark:bg-[#00000000] focus:outline-0 text-white " />
