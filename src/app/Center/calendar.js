@@ -45,9 +45,29 @@ function Calendar({ currentMonth, setCurrentMonth, refreshEventsTrigger }) {
     async function loadEvents() {
       try {
         const year = currentMonth.getFullYear();
-        const month = currentMonth.getMonth() + 1; // getMonth() is 0-indexed
-        const fetchedEvents = await fetchEventsForMonth(year, month);
-        setEvents(fetchedEvents);
+        const month = currentMonth.getMonth() + 1;
+        
+        let prevMonth = currentMonth.getMonth();
+        let prevYear = currentMonth.getFullYear();
+        if (prevMonth === 0) {
+            prevMonth = 12;
+            prevYear -= 1;
+        }
+
+        let nextMonth = currentMonth.getMonth() + 2;
+        let nextYear = currentMonth.getFullYear();
+        if (nextMonth === 13) {
+            nextMonth = 1;
+            nextYear += 1;
+        }
+
+        const fetchedEvents = await fetchEventsForMonth(year, month),
+        fetchedEventsPrev = await fetchEventsForMonth(prevYear, prevMonth),
+        fetchedEventsNext = await fetchEventsForMonth(nextYear, nextMonth);
+
+        const relevantEvents = [...fetchedEventsPrev, ...fetchedEvents, ...fetchedEventsNext];
+
+        setEvents(relevantEvents);
       } catch (error) {
         console.error("Failed to load events:", error);
         setEvents([]); // Clear events on error
@@ -55,6 +75,7 @@ function Calendar({ currentMonth, setCurrentMonth, refreshEventsTrigger }) {
     }
     loadEvents();
   }, [currentMonth, refreshEventsTrigger]);
+
 
   const openDayPlan = ( day ) => {
 
@@ -85,7 +106,6 @@ function Calendar({ currentMonth, setCurrentMonth, refreshEventsTrigger }) {
       </div>
       <div className="h-[calc(100%-40px)] grid grid-cols-7">
         {days.map((day) => {
-          const hasEvents = events.some(event => isSameDay(new Date(event.startDate), day));
           const eventsForToday = events.filter(event =>
       isSameDay(new Date(event.startDate), day)
     );
@@ -93,21 +113,22 @@ function Calendar({ currentMonth, setCurrentMonth, refreshEventsTrigger }) {
         return (
           <div 
             key={day.toISOString()} onClick={() => openDayPlan(new Date(day.getFullYear(), day.getMonth(), day.getDate()))}
-            className={`py-2 px-1 border-r border-b w-full h-full flex flex-col justify-center border-[#ffffff59] duration-150  last:border-r-0
+            className={`py-2 px-1 border-r border-b w-full h-[127px] flex flex-col content-start gap-2 border-[#ffffff59] duration-150  last:border-r-0
              ${!daysInMonth.some(d => isSameDay(d, day)) ? 'text-[#ffffff74]' : ''}`}>
-            <div className={`
-                p-2 h-7 w-7 flex flex-col items-center justify-center text-center
-                ${isSameDay(day, today) ? 'bg-[#0000009d] text-white rounded-full font-bold border-2' : ''}
-                ${!isSameDay(day, today) && !daysInMonth.some(d => isSameDay(d, day)) ? 'opacity-[30%]' : ''}
-            `}>
-                {format(day, 'd')}
+             <div className='w-full flex items-center justify-center'>
+              <div className={`
+                  p-2 h-7 w-7 flex flex-col items-center justify-center text-center content-start
+                  ${isSameDay(day, today) ? 'bg-[#0000009d] text-white rounded-full font-bold border-2' : ''}
+                  ${!isSameDay(day, today) && !daysInMonth.some(d => isSameDay(d, day)) ? 'opacity-[30%]' : ''}
+              `}>
+                  {format(day, 'd')}
 
-                
+             </div>   
             </div>
-            {hasEvents && (
+            {eventsForToday.length > 0 && (
                     <div className="flex flex-col w-full gap-1">{eventsForToday.slice(0, 2).map(eventToday => (
-                      <div key={eventToday.id} className='py-[1px] px-[2px] bg-[#ff000059] w-full rounded-md hover:bg-[#ff0000b7]'>
-                        <p>
+                      <div key={eventToday.id} className='py-[1px] px-[2px] bg-[#ff0000] w-full rounded-md duration-150 hover:opacity-80'>
+                        <p className='text-sm px-1'>
                             {eventToday.title}
                         </p>
                       </div>

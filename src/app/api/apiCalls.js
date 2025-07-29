@@ -5,7 +5,7 @@ export async function fetchEventsForMonth(year, month) {
         }
 
         try {
-            const response = await fetch(`http://localhost:8080/api/events?year=${year}&month=${month}`, {
+            const response = await fetch(`http://localhost:8080/api/events?Year=${year}&Month=${month}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
