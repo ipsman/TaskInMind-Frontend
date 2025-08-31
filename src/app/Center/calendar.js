@@ -3,7 +3,7 @@ import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, each
 import { hu } from 'date-fns/locale';
 import { fetchEventsForMonth } from '../api/apiCalls';
 
-function Calendar({ currentMonth, setCurrentMonth, refreshEventsTrigger }) {
+function Calendar({ currentMonth, setCurrentMonth, refreshEventsTrigger, onDaySelect }) {
   const calendarRef = useRef(null);
 
   const [events, setEvents] = useState([]);
@@ -70,37 +70,25 @@ function Calendar({ currentMonth, setCurrentMonth, refreshEventsTrigger }) {
         setEvents(relevantEvents);
       } catch (error) {
         console.error("Failed to load events:", error);
-        setEvents([]); // Clear events on error
+        setEvents([]);
       }
     }
     loadEvents();
   }, [currentMonth, refreshEventsTrigger]);
 
 
-  const openDayPlan = ( day ) => {
-
-     const formattedDate = format(day, 'yyyy-MM-dd');
-    document.getElementById("dayPlan").style.transform = "translatey(-1925px)";
-    document.getElementById("startDate").value = formattedDate;
-    document.getElementById("endDate").value = formattedDate;
-    var hours = new Date;
-    document.getElementById("startHours").value = hours.getHours().toString().padStart(2, '0') + ":" + hours.getMinutes().toString().padStart(2, '0');
-    document.getElementById("endHours").value = (hours.getHours()+1).toString().padStart(2, '0') + ":" + hours.getMinutes().toString().padStart(2, '0');
-
+  const openDayPlan = (day) => {
     const eventsForSelectedDay = events.filter(event =>
       isSameDay(new Date(event.startDate), day)
     );
-    // Assuming onDaySelect is a prop function that the parent (DayPlan) provides
-    // to receive the selected day's events.
-    if (typeof onDaySelect === 'function') {
-      onDaySelect(day, eventsForSelectedDay);
-    }
+
+    onDaySelect(day, eventsForSelectedDay);
   };
 
   return (
     <div ref={calendarRef} className="w-[calc(100%-8px)] h-full shadow-md rounded-lg m-1 p-1 dark:bg-[#000000b9] bg-[#ffffffb9] text-gray-300 overflow-hidden">
       <div className="grid grid-cols-7 border-b border-[#ffffff10]">
-        {['H', 'K', 'Sze', 'Cs', 'P', 'Szo', 'V'].map(day => (
+        {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
           <div key={day} className="py-2 text-center text-sm text-[#ffffffc2]">{day}</div>
         ))}
       </div>
@@ -113,7 +101,7 @@ function Calendar({ currentMonth, setCurrentMonth, refreshEventsTrigger }) {
         return (
           <div 
             key={day.toISOString()} onClick={() => openDayPlan(new Date(day.getFullYear(), day.getMonth(), day.getDate()))}
-            className={`py-2 px-1 border-r border-b w-full h-[127px] flex flex-col content-start gap-2 border-[#ffffff59] duration-150  last:border-r-0
+            className={`py-2 px-1 border-r border-b w-full lg:h-[127px] 2xl:h-[170px] 3xl:h-[242px] flex flex-col content-start gap-2 border-[#ffffff59] duration-150  last:border-r-0
              ${!daysInMonth.some(d => isSameDay(d, day)) ? 'text-[#ffffff74]' : ''}`}>
              <div className='w-full flex items-center justify-center'>
               <div className={`
@@ -127,7 +115,7 @@ function Calendar({ currentMonth, setCurrentMonth, refreshEventsTrigger }) {
             </div>
             {eventsForToday.length > 0 && (
                     <div className="flex flex-col w-full gap-1">{eventsForToday.slice(0, 2).map(eventToday => (
-                      <div key={eventToday.id} className='py-[1px] px-[2px] bg-[#ff0000] w-full rounded-md duration-150 hover:opacity-80'>
+                      <div key={eventToday.id} className={`py-[1px] px-[2px] bg-[${eventToday.color}] w-full rounded-md duration-150 hover:opacity-80`}>
                         <p className='text-sm px-1'>
                             {eventToday.title}
                         </p>

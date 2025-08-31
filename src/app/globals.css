@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@tailwind utilities;
+
 
 :root {
   --background: #ffffff;
@@ -25,6 +27,9 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+@theme {
+  --breakpoint-3xl: 140rem;
+}
 
 @keyframes shine { 
   0% {

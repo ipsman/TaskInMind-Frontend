@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, eachDayOfInterval } from 'date-fns';
-import { hu } from 'date-fns/locale';
+import { enUS, hu } from 'date-fns/locale';
 
 function MiniCalendar() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -14,7 +14,7 @@ function MiniCalendar() {
   const days = eachDayOfInterval({ start: firstDayOfWeek, end: lastDayOfWeek });
 
   const daysInMonth = eachDayOfInterval({ start: firstDayOfMonth, end: lastDayOfMonth });
-  const formattedMonth = format(currentMonth, 'yyyy MMMM', { locale: hu });
+  const formattedMonth = format(currentMonth, 'yyyy MMMM', { locale: enUS });
 
   return (
     <div className="w-[calc(w-full - 8px)] h-50% shadow-md rounded-lg m-1 p-1 dark:bg-[#000000b9] bg-[#ffffffb9] text-gray-300">
@@ -36,7 +36,7 @@ function MiniCalendar() {
         </button>
       </div>
       <div className="grid grid-cols-7 border-b border-[#ffffff10]">
-        {['H', 'K', 'Sze', 'Cs', 'P', 'Szo', 'V'].map(day => (
+        {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
           <div key={day} className="py-2 text-center text-sm text-[#ffffffc2]">{day}</div>
         ))}
       </div>
