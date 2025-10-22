@@ -3,7 +3,7 @@ import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, each
 import { hu } from 'date-fns/locale';
 import { fetchEventsForMonth } from '../api/apiCalls';
 
-function Calendar({ currentMonth, setCurrentMonth, refreshEventsTrigger, onDaySelect }) {
+function Calendar({ currentMonth, setCurrentMonth, refreshEventsTrigger, onDaySelect, setEventId }) {
   const calendarRef = useRef(null);
 
   const [events, setEvents] = useState([]);
@@ -115,7 +115,7 @@ function Calendar({ currentMonth, setCurrentMonth, refreshEventsTrigger, onDaySe
             </div>
             {eventsForToday.length > 0 && (
                     <div className="flex flex-col w-full gap-1">{eventsForToday.slice(0, 2).map(eventToday => (
-                      <div key={eventToday.id} className={`py-[1px] px-[2px] bg-[${eventToday.color}] w-full rounded-md duration-150 hover:opacity-80`}>
+                      <div key={eventToday.id} className={`py-[1px] px-[2px] w-full rounded-md duration-150 hover:opacity-80`} style={{ backgroundColor:eventToday.color }}>
                         <p className='text-sm px-1'>
                             {eventToday.title}
                         </p>

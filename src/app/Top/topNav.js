@@ -13,7 +13,7 @@ const TopNav = ({ currentMonth, goToPreviousMonth, goToNextMonth, goToToday, onS
     <div className="dark:bg-[#000000b9] bg-[#ffffffb9] px-[20px] h-[55px] flex justify-between">
         <div className='flex gap-28'>
             <h1 className="text-3xl content-center">TaskInMind</h1>
-            <div className="flex gap-3">
+            <div className="flex gap-3" id='calendarControls'>
                 <button
                 onClick={goToToday}
                 className="text-lg border my-2 px-3 rounded-4xl transition-all duration-300 hover:bg-[#7f7f7f8c] active:scale-75"

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Calendar from "./Center/calendar";
 import Sidenav from "./SideNav/Sidenav";
 import { addMonths } from 'date-fns';
@@ -8,6 +8,8 @@ import TopNav from './Top/topNav';
 import DayPlan from './Center/dayPlan';
 import Settings from './Center/settings';
 import WeatherDisplay from './SideNav/weatherApi';
+import EditEvent from './Center/editEvent';
+import TaskDashboard from './Center/taskDashboard';
 
 const BasePage = ({ onLogout }) => {
     const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -16,6 +18,10 @@ const BasePage = ({ onLogout }) => {
     const [isDayPlanVisible, setIsDayPlanVisible] = useState(false);
     const [isNewEvent, setIsNewEvent] = useState(false);
     const [refreshEventsTrigger, setRefreshEventsTrigger] = useState(0);
+    const [selectedEvent, setSelectedEvent] = useState(null);
+    const [isEditEventVisble, setEditEventVisble] = useState(false);
+
+    
 
     const goToPreviousMonth = () => {
         setCurrentMonth(prevMonth => addMonths(prevMonth, -1));
@@ -45,11 +51,25 @@ const BasePage = ({ onLogout }) => {
         handleDaySelect(new Date, [])
     };
 
+    const handleEditEvent = () => {
+        setEditEventVisble(true);
+        setIsDayPlanVisible(false);
+    }
+
     const handleClose = () => {
         setIsDayPlanVisible(false);
         setIsNewEvent(false);
         setRefreshEventsTrigger(prev => prev + 1);
     };
+
+    const handleSetEvent = (event) => {
+        setSelectedEvent(event);
+    }
+
+    const handleEditEventClose = () => {
+        setEditEventVisble(false);
+        setRefreshEventsTrigger(prev => prev + 1);
+    }
 
     return (
         <div className="w-full h-full flex-col">
@@ -60,6 +80,13 @@ const BasePage = ({ onLogout }) => {
                 goToToday={goToToday}
                 onSelectToday={handleAddEvent}
             />
+            { isEditEventVisble && (
+                    <EditEvent 
+                        event={selectedEvent}
+                        onClose={handleEditEventClose}
+                    />
+                )
+            }
             {isDayPlanVisible && selectedDay && (
                 <DayPlan
                     day={selectedDay}
@@ -67,18 +94,23 @@ const BasePage = ({ onLogout }) => {
                     onClose={handleClose}
                     isVisible={isDayPlanVisible}
                     isNewEvent={isNewEvent}
+                    setEvent={handleSetEvent}
+                    handleEditEvent={handleEditEvent}
                 />
             )}
-            <Settings />
+            <Settings/>
             <div className="flex h-[calc(100%-55px)]">
                 <Sidenav onLogout={onLogout} />
                 <div className="h-full w-full">
-                    <Calendar
+                    {/* <Calendar
                         currentMonth={currentMonth}
                         setCurrentMonth={setCurrentMonth}
                         onDaySelect={handleDaySelect}
                         refreshEventsTrigger={refreshEventsTrigger}
-                    />
+                        setEvent={handleSetEvent}
+                    /> */}
+
+                    <TaskDashboard></TaskDashboard>
                 </div>
                 <div className="dark:bg-[#000000b9] bg-[#ffffffb9] px-[10px] h-full w-[80px] flex justify-center">
                     <div className='flex flex-col gap-1 text-sm'>

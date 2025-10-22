@@ -1,59 +1,54 @@
 'use client'
 
-import React, { useState } from 'react';
-import { format } from 'date-fns';
 import ColorPicker from './elements/colorPicker';
-import { addEvent } from '../api/apiCalls';
+import React, { useEffect, useState } from 'react';
+import { format } from 'date-fns';
+import { deleteEvent, editEvent } from '../api/apiCalls';
 import RecurrancePicker from './elements/recurrancePicker';
 
-function DayPlan({ day, eventsForDay, onClose,  isVisible, isNewEvent, setEvent, handleEditEvent }) {
-    var date = new Date();
-    var oneHourPlus = date;
-    oneHourPlus.setHours(date.getHours());
-    const formattedDate = format(day, 'yyyy-MM-dd'), formattedHours = format(date, 'HH:mm'), 
-    fornattedPlusHours = format(oneHourPlus,'HH:mm');
-    const [title, setTitle] = useState('');
+function EditEvent({ event, onClose }) {
+    const startDateObj = new Date(event.startDate);
+    const endDateObj = new Date(event.endDate);
+
+    const formattedDate = format(startDateObj, 'yyyy-MM-dd');
+    const formattedEndDate = format(endDateObj, 'yyyy-MM-dd');
+    const formattedHours = format(startDateObj, 'HH:mm');
+    const fornattedPlusHours = format(endDateObj, 'HH:mm');
+
+    const [title, setTitle] = useState(event.title);
     const [startDate, setStartDate] = useState(formattedDate);
     const [startHours, setStartHours] = useState(formattedHours);
-    const [endDate, setEndDate] = useState(formattedDate);
+    const [endDate, setEndDate] = useState(formattedEndDate);
     const [endHours, setEndHours] = useState(fornattedPlusHours);
-    const [description, setDescription] = useState('');
-    const [location, setLocation] = useState('');
-    const [color, setColor] = useState('#FF2C2C');
-    const [repeat, setRepeat] = useState('Never');
+    const [description, setDescription] = useState(event.description);
+    const [location, setLocation] = useState(event.location);
+    const [color, setColor] = useState(event.color);
+    const [repeat, setRepeat] = useState(event.repeat);
 
-    const transformClass = isVisible ? 'translate-y-0' : 'translate-y-[2000px]';
-      var min = 30;
-      const save = () => {
-
-        const localStartDateTime = `${startDate}T${startHours}`;
-        const localEndDateTime = `${endDate}T${endHours}`;
-
-
-
+    const save = () => {
+        const fullStartDate = `${startDate}T${startHours}`;
+        const fullEndDate = `${endDate}T${endHours}`;
     
         if (!title || !startDate || !endDate) {
             alert("A cím, a kezdő és a befejező dátum megadása kötelező!");
             return;
         }
-        
-        addEvent(localStartDateTime, localEndDateTime, title, description, location, color, repeat, min);
+    
+        editEvent(fullStartDate, fullEndDate, title, description, location, color, repeat, eventId);
         onClose();
       }
-    
 
-      const openEvent = ( event ) => {
-        setEvent(event);
-        handleEditEvent();
-      }
 
+    const handleDeleteEvent = () => {
+      deleteEvent(event);
+      onClose();
+    }
+  
   return (
-    <div className={`w-full h-full absolute flex justify-center duration-200 ${transformClass}`} id="dayPlan">
-      <div className="relative w-[32%] h-[80%] shadow-md rounded-lg m-1 p-1 dark:bg-[#000000b9] bg-[#ffffffb9] text-gray-300 overflow-hidden border backdrop-blur-md">
-        <div className="w-full h-full flex flex-col justify-center py-3 px-2">
-          { isNewEvent && (
-            <div className="w-full h-full">
-              <h2 className="text-2xl mb-3" id="dayTitle">Event</h2>
+    <div className="w-full h-full absolute flex justify-center duration-200" id="settings">
+        <div className="relative w-[32%] h-[80%] shadow-md rounded-lg m-1 p-1 dark:bg-[#000000b9] bg-[#ffffffb9] text-gray-300 overflow-hidden border backdrop-blur-md">
+            <div className="w-full h-full py-3 px-2">
+              <h2 className="text-2xl mb-3" id="dayTitle">{title}</h2>
               <div className="w-full h-full flex flex-col gap-8">
                 <div className="space-y-4">
                   <div>
@@ -99,37 +94,19 @@ function DayPlan({ day, eventsForDay, onClose,  isVisible, isNewEvent, setEvent,
                 <div className="space-y-2">
                   <div className='w-full flex justify-center'>
                     <button type="button" onClick={save} className="absolute bottom-4 right-4 px-8 py-3 font-semibold rounded-md dark:bg-gray-50 dark:text-[#000000b9] transition-all duration-300 active:scale-75">Save</button>
+                    <button type="button" onClick={handleDeleteEvent} className="absolute bottom-4 left-4 px-8 py-3 font-semibold rounded-md dark:bg-gray-50 dark:text-[#000000b9] transition-all duration-300 active:scale-75">Delete</button>
                   </div>
                 </div>
               </div>
             </div>
-          ) || (
-            <>
-            <h2 className="text-2xl text-center" id="dayTitle">{format(day, 'yyyy. MMMM d')}</h2>
-            <div className='w-full h-full flex flex-col gap-2 py-[2rem]'>
-              {eventsForDay.map(event => (
-                <div key={event.id} onClick={() => openEvent(event)} className={`py-[1px] px-[2px] flex flex-col w-full h-[4rem] rounded-md duration-150 hover:opacity-80`}  style={{ backgroundColor:event.color }} >
-                  <p className='text-xl px-1'>
-                    {event.title}
-                  </p>
-                  <p className='text-xl px-1'>
-                    {format(event.startDate, "HH:mm")} - {format(event.endDate, "HH:mm")}
-                  </p>
-                </div>
-              ))}
-            </div>
-            </>
-          )}
-          
+            <button className="absolute top-2 right-2"  onClick={onClose}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-7">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
         </div>
-        <button className="absolute top-2 right-2" onClick={onClose}>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-7">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
     </div>
   );
 }
 
-export default DayPlan;
+export default EditEvent;

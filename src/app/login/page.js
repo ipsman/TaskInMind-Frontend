@@ -16,31 +16,6 @@ const LoginPage = ({ onSignUp, onLoginSuccess }) => {
   };
 
   const handleSignIn = () => {
-    // const storedUsers = {};
-    // for (let i = 0; i < localStorage.length; i++) {
-    //   const key = localStorage.key(i);
-    //   if (key && key.startsWith('userData_')) {
-    //     try {
-    //       const userString = localStorage.getItem(key);
-    //       if (userString) {
-    //         const user = JSON.parse(userString);
-    //         storedUsers[user.email] = user;
-    //         console.log(user);
-    //       }
-    //     } catch (error) {
-    //       console.error('Hiba a felhasználói adatok olvasása közben:', error);
-    //     }
-    //   }
-    // }
-
-    // if (storedUsers[email] && storedUsers[email].password === password) {
-    //   localStorage.setItem('authToken', 'valami_token');
-    //   localStorage.setItem('loggedInUsername', storedUsers[email].name);
-    //   onLoginSuccess();
-    // } else {
-    //   setLoginError('Hibás e-mail cím vagy jelszó.');
-    // }
-
     loginUser(username, password)
   };
 
@@ -59,6 +34,7 @@ const LoginPage = ({ onSignUp, onLoginSuccess }) => {
             console.log('Login successful. Token:', token);
             localStorage.setItem('authToken', token); 
             localStorage.setItem('loggedInUsername', username);
+            localStorage.setItem('tokenCreated', new Date);
             onLoginSuccess(); 
             return token;
         } else {

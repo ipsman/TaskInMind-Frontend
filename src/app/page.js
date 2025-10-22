@@ -25,7 +25,23 @@ const Home = () => {
       window.addEventListener('resize', handleResize);
 
       const token = localStorage.getItem('authToken');
-      setIsLoggedIn(!!token);
+
+      const tokenCreatedString = localStorage.getItem('tokenCreated');
+
+      if (tokenCreatedString) {
+        
+        const tokenCreatedTimestamp = new Date(tokenCreatedString).getTime();
+        
+        const nowTimestamp = new Date().getTime();
+        
+        const timeDifferenceMs = nowTimestamp - tokenCreatedTimestamp;
+        
+        const twentyFourHoursInMs = 24 * 60 * 60 * 1000;
+        
+        if (timeDifferenceMs <= twentyFourHoursInMs) {
+          setIsLoggedIn(!!token);
+        } 
+      }       
 
       return () => {
         window.removeEventListener('resize', handleResize);

@@ -2,56 +2,71 @@ import { useState } from "react";
 
 const ColorPicker = ({ pickedColor }) => {
 
-    const [isColorsOpened, setIsColorsOpened] = useState(false);
-    const [selectedColor, setSelectedColor] = useState("#FF2C2C");
+  const [selectedColor, setSelectedColor] = useState("#D93630");
 
-      const toggleColors = () => {
-        setIsColorsOpened(!isColorsOpened);
-      };
-  
 
-      const colors = [
-        "#FF2C2C",
-        "#FF7518",
-        "#FFD32C",
-        "#68BA7F",
-        "#2E6F40",
-        "#4682B4",
-        "#6C3BAA",
-        "#777777",
-      ]
 
-      var newColor = "#FF2C2C";
+  const colors = [
+{ name: "Tomato Red", hex: "#D93630" }, 
 
-      const pick = ( color ) => {
-        pickedColor(color);
-        setSelectedColor(color);
-        toggleColors();
-      }
-      
+    // Narancs: meleg, jól látható
+    { name: "Tangerine Orange", hex: "#F47A00" }, 
+
+    // Sárga: kontrasztos, tiszta
+    { name: "Goldenrod Yellow", hex: "#F5C300" }, 
+
+    // Zöld: klasszikus Google Naptár zöld
+    { name: "Basil Green", hex: "#0B8043" }, 
+
+    // Cián/Türkiz: világosabb, de megkülönböztethető kék
+    { name: "Peacock Blue", hex: "#039BE5" }, 
+
+    // Kék: mélyebb, professzionális kék
+    { name: "Sapphire Blue", hex: "#3F51B5" }, 
+
+    // Lila: erőteljes, jól elkülönül a többi színtől
+    { name: "Amethyst Purple", hex: "#795548" }, 
+    
+    // Barna/Földszín: hasznos semleges árnyalat
+    { name: "Earth Brown", hex: "#6D28D9" }, 
+
+    // Rózsaszín/Magenta: kiegészítő, nőiesebb árnyalat
+    { name: "Fuchsia Pink", hex: "#E91E63" }, 
+
+    // Szürke: alapértelmezett, diszkrét opció
+    { name: "Slate Grey", hex: "#616161" },
+  ];
+
+  function pick(color) {
+    pickedColor(color);
+    setSelectedColor(color);
+  }
+
+
   return (
-    <div>
-        <p>
-            Color
-        </p>
-        <div
-        onClick={toggleColors}
-        className={`px-4 py-2 w-8 h-8 rounded-md bg-[${selectedColor}] duration-500 text-white rounded-md`}
-        >
-        
-        </div>
+    <div className="w-full mb-4">
+      <p className="text-lg font-semibold mb-2">Color Selection</p>
 
-        <div className={`
-        grid grid-cols-4 gap-1 py-2 w-[15%] 
-        ${isColorsOpened ? 'opacity-100' : 'opacity-0'}
-        transition-all duration-500 overflow-hidden
+
+
+      <div className={`
+            grid grid-cols-4 gap-2 w-fit h-fit transition-all duration-500 ease-in-out
         `}>
-            {
-                colors.map((color) => (
-                    <div key={color} onClick={() => pick(color)} className={`w-8 h-8 rounded-md bg-[${color}] duration-200 hover:scale-110`}></div>
-                ))
-            }
-        </div>
+        {
+          colors.map((colorItem) => (
+            <div
+              key={colorItem.hex} // Use hex as key for uniqueness
+              onClick={() => pick(colorItem.hex)} // Call pick with the hex color
+              className={`
+                            w-11 h-11 rounded-md duration-200 hover:scale-110 cursor-pointer 
+                            ${selectedColor === colorItem.hex ? 'outline-2 outline-offset-2 outline-white' : ''}
+                        `}
+              style={{ backgroundColor: colorItem.hex }}
+              title={colorItem.name} // Show color name on hover
+            ></div>
+          ))
+        }
+      </div>
     </div>
   );
 }
