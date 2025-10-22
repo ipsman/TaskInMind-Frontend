@@ -30,7 +30,9 @@ export async function fetchEventsForMonth(year, month) {
     }
 
 
-    export async function fetchEventsForDay(year, month, day) {
+    export async function addEvent(event) {
+        try {
+          
         const token = localStorage.getItem("authToken");
         if(!token){
             return [];
