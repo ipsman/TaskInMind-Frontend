@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import Calendar from "./Center/calendar";
 import Sidenav from "./SideNav/Sidenav";
 import { addMonths } from 'date-fns';
@@ -20,6 +20,8 @@ const BasePage = ({ onLogout }) => {
     const [refreshEventsTrigger, setRefreshEventsTrigger] = useState(0);
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [isEditEventVisble, setEditEventVisble] = useState(false);
+    const [isCalendarOpen, setCalendarOpen] = useState(true);
+
 
     
 
@@ -71,6 +73,17 @@ const BasePage = ({ onLogout }) => {
         setRefreshEventsTrigger(prev => prev + 1);
     }
 
+    const handleOpenCalendar = (setter) => {
+        setCalendarOpen(setter);
+
+        if(setter == false){
+            document.getElementById("calendarControls").style.display = "none";
+        }
+        else{
+            document.getElementById("calendarControls").style.display = "flex";
+        }
+    }
+
     return (
         <div className="w-full h-full flex-col">
             <TopNav
@@ -100,17 +113,19 @@ const BasePage = ({ onLogout }) => {
             )}
             <Settings/>
             <div className="flex h-[calc(100%-55px)]">
-                <Sidenav onLogout={onLogout} />
+                <Sidenav onLogout={onLogout} handleOpenCalendar={handleOpenCalendar}/>
                 <div className="h-full w-full">
-                    {/* <Calendar
-                        currentMonth={currentMonth}
-                        setCurrentMonth={setCurrentMonth}
-                        onDaySelect={handleDaySelect}
-                        refreshEventsTrigger={refreshEventsTrigger}
-                        setEvent={handleSetEvent}
-                    /> */}
-
-                    <TaskDashboard></TaskDashboard>
+                    {isCalendarOpen && (
+                        <Calendar
+                            currentMonth={currentMonth}
+                            setCurrentMonth={setCurrentMonth}
+                            onDaySelect={handleDaySelect}
+                            refreshEventsTrigger={refreshEventsTrigger}
+                            setEvent={handleSetEvent}
+                        />
+                    ) || (
+                        <TaskDashboard></TaskDashboard>
+                    )}                
                 </div>
                 <div className="dark:bg-[#000000b9] bg-[#ffffffb9] px-[10px] h-full w-[80px] flex justify-center">
                     <div className='flex flex-col gap-1 text-sm'>

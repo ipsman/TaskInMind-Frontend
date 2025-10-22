@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { addTask, fetchTasks } from '../api/apiCalls';
+import { addTask, fetchTasks, editTask, deleteTask } from '../api/apiCalls';
 
 function TaskDashboard() {
     const [tasks, setTasks] = useState([]);
@@ -26,30 +26,63 @@ function TaskDashboard() {
   }, []);
 
 
-    const handleAddTask = (e) => {
-        e.preventDefault();
-        if (!newTaskText.trim()) return;
+    const handleAddTask = async (e) => {
+    e.preventDefault();
+    if (!newTaskText.trim()) return;
 
+    try {
         const formattedDueDate = newTaskDueDate ? `${newTaskDueDate}T00:00:00` : null;
 
-        addTask(newTaskText.trim(), formattedDueDate, newTaskPriority, newTaskDescription.trim());
-
-        setNewTaskText('');
-        setNewTaskDescription('');
-        setNewTaskPriority('medium');
-        setNewTaskDueDate('');
-    };
-
-    const toggleTask = (id) => {
-        setTasks(
-            tasks.map(task =>
-                task.id === id ? { ...task, completed: !task.completed } : task
-            )
+        const newTask = await addTask(
+            newTaskText.trim(), 
+            formattedDueDate,
+            newTaskPriority, 
+            newTaskDescription.trim()
         );
+
+        
+        if (newTask) {
+             setTasks(prevTasks => [...prevTasks, newTask]);
+             setNewTaskText('');
+             setNewTaskDescription('');
+             setNewTaskPriority('medium');
+             setNewTaskDueDate('');
+        }
+
+
+    } catch (error) {
+        console.error("Failed to add task in frontend:", error);
+    }
+};
+
+    const toggleTask = async (id) => {
+        const taskToUpdate = tasks.find(task => task.id === id);
+
+        const updatedTaskLocal = { ...taskToUpdate, completed: !taskToUpdate.completed };
+
+        try{
+            const updatedTaskFromApi = await editTask(updatedTaskLocal);
+
+            setTasks(
+                tasks.map(
+                    task => task.id === id ? updatedTaskFromApi : task
+                )
+            );
+        }
+        catch (error){
+            console.error(error);
+        }
     };
 
-    const deleteTask = (id) => {
-        setTasks(tasks.filter(task => task.id !== id));
+    const deleteTask = async (id) => {
+        try{
+            deleteTask(id);
+            setTasks(tasks.filter(task => task.id !== id));
+        }
+        catch (error){
+            console.error(error);
+        }
+ 
     };
 
     const toggleDescription = (id) => {

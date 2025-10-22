@@ -272,3 +272,66 @@ export async function fetchTasks() {
             return [];
         }
     }
+
+           export async function editTask(task) {
+        try {
+          
+          const token = localStorage.getItem("authToken");
+    
+          const response = await fetch(`http://localhost:8080/api/tasks/${task.id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}` 
+            },
+            body: JSON.stringify(task),
+          });
+    
+          if (response.status === 204) {
+          return null; 
+        }
+          if (response.ok) {
+            return await response.json();
+          } else {
+            const errorData = await response.json();
+            
+            let errorMessage = 'Esemény mentése sikertelen.';
+            if (errorData && errorData.message) {
+              errorMessage = errorData.message;
+            }
+            console.error('Esemény mentése sikertelen:', response.status, errorData);
+            alert('Error occured while saving: ' + errorMessage);
+            throw new Error(errorMessage);
+          }
+        } catch (error) {
+          console.error('Hálózati hiba:', error);
+          alert("Network error: Couldn't communicate with server.");
+          throw error;
+        }
+      }
+
+
+       export async function deleteTask(id) {
+          try {
+              const token = localStorage.getItem("authToken");
+
+              const response = await fetch(`http://localhost:8080/api/tasks/${id}`, {
+                  method: 'DELETE',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `Bearer ${token}` 
+                  }
+              });
+
+              if (!response.ok) {
+
+                  throw new Error(`A törlés sikertelen. Státuszkód: ${response.status}`);
+              }
+              console.log(`Esemény sikeresen törölve: ID ${event.id}. Státusz: ${response.status}`);
+              
+
+          } catch (error) {
+              console.error("Hiba a törlés során:", error);
+              alert(`Error occured while deleting. Details: ${error.message}`);
+          }
+      }

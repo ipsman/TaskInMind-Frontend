@@ -3,15 +3,15 @@
 import React, { useState } from 'react';
 import MiniCalendar from "./miniCalendar";
 
-const Sidenav = ({ onLogout }) => {
+const Sidenav = ({ onLogout, handleOpenCalendar }) => {
 
     const navigation = [
-        { name: "Tasks", id: 'homeTitle', num: '0'},
-        { name: "Calendars", id: 'nabTitle', num: '1'},
+        { name: "Tasks", id: 'homeTitle', num: false},
+        { name: "Calendars", id: 'nabTitle', num: true},
     ];
 
     const listItems = navigation.map(item =>
-        <li id={item.id} key={item.name}><button className="px-3" onClick={() => GoAnchor(item.num)} >{item.name}</button></li>
+        <li id={item.id} key={item.name}><button className="px-3" onClick={() => handleOpenCalendar(item.num)} >{item.name}</button></li>
     );
 
     const [isCollapsed, setIsCollapsed] = useState(false);
