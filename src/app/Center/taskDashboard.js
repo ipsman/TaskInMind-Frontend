@@ -1,14 +1,17 @@
 'use client'
 
 import { useState, useEffect } from 'react';
+import { format } from 'date-fns';
 import { addTask, fetchTasks, editTask, deleteTask } from '../api/apiCalls';
 
 function TaskDashboard() {
+    const date = format(Date(), 'yyyy-MM-dd');
+
     const [tasks, setTasks] = useState([]);
     const [newTaskText, setNewTaskText] = useState('');
     const [newTaskDescription, setNewTaskDescription] = useState(''); 
     const [newTaskPriority, setNewTaskPriority] = useState('medium'); 
-    const [newTaskDueDate, setNewTaskDueDate] = useState(''); 
+    const [newTaskDueDate, setNewTaskDueDate] = useState(date); 
     const [filter, setFilter] = useState('all');
     const [expandedDescriptionId, setExpandedDescriptionId] = useState(null); 
 
@@ -74,7 +77,7 @@ function TaskDashboard() {
         }
     };
 
-    const deleteTask = async (id) => {
+    const handleDeleteTask = async (id) => {
         try{
             deleteTask(id);
             setTasks(tasks.filter(task => task.id !== id));
@@ -310,7 +313,7 @@ function TaskDashboard() {
                                                     </button>
                                                 )}
                                                 <button 
-                                                    onClick={() => deleteTask(task.id)}
+                                                    onClick={() => handleDeleteTask(task.id)}
                                                     className="p-2 text-gray-400 hover:text-red-500 transition-colors rounded"
                                                     title="Delete"
                                                 >

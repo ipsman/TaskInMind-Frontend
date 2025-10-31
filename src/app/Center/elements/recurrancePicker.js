@@ -26,8 +26,8 @@ const RecurrancePicker = ({ pickedOption }) => {
         `}>
             {
                 options.map((option) => (
-                    <div key={option} onClick={() => pick(option)} className={`bg-[#494949b0] p-2 rounded-md duration-200 hover:scale-105 ${selectedOption === option ? 'outline-2 outline-offset-2 outline-white' : ''}`} >
-                        <p>{option}</p>
+                    <div key={option} onClick={() => pick(option)} className={`bg-[#494949b0] p-2 xl:p-1 rounded-md duration-200 hover:scale-105 ${selectedOption === option ? 'outline-2 outline-offset-2 outline-white' : ''}`} >
+                        <p className="xl:text-sm">{option}</p>
                     </div>
                 ))
             }

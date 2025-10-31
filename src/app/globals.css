@@ -29,7 +29,9 @@ body {
 
 @theme {
   --breakpoint-3xl: 140rem;
+  --breakpoint-2xl: 119rem;
 }
+
 
 @keyframes shine { 
   0% {

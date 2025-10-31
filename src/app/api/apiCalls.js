@@ -125,7 +125,9 @@ export async function fetchEventsForMonth(year, month) {
               description: event.description,
               location: event.location,
               color: event.color,
-              repeat: event.repeat
+              repeat: event.repeat,
+              reminderTime: event.reminderTime,
+              allDay: event.allDay
             }),
           });
     
@@ -322,12 +324,6 @@ export async function fetchTasks() {
                       'Authorization': `Bearer ${token}` 
                   }
               });
-
-              if (!response.ok) {
-
-                  throw new Error(`A törlés sikertelen. Státuszkód: ${response.status}`);
-              }
-              console.log(`Esemény sikeresen törölve: ID ${event.id}. Státusz: ${response.status}`);
               
 
           } catch (error) {
